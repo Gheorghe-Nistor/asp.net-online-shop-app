@@ -15,13 +15,12 @@ namespace OnlineShopApp.Models
         [Required(ErrorMessage = "Descrierea este obligatorie")]
         [MinLength(30, ErrorMessage = "Descrierea nu poate avea mai puțin de 50 caractere")]
         public string? Description { get; set; }
-        public double? Price { get; set; }
-        public DateTime Date { get; set; }
+        [Required(ErrorMessage = "Prețul produsului este obligatoriu")]
+        [Range(1, 5000, ErrorMessage = "Prețul trebuie să fie între 1 și 5000 lei")]
+        public double Price { get; set; }
+        public DateTime CreatedAt { get; set; }
         [Required(ErrorMessage = "Categoria este obligatorie")]
         public int CategoryId { get; set; }
-        public virtual Category Category { get; set; }
-
-        // image, colecție review-uri
-        // categorie
+        public virtual Category? Category { get; set; }
     }
 }
