@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TTrHG8p1x4QMWPZBBA9DzAoKQUWo/HcbESGR3HT3IXo=",
+  "Hash": "Z0YkHM8udVpTAUZ3GL3+x4d/r+GME+3tFTeE13NOoi0=",
   "Source": "OnlineShopApp",
   "BasePath": "_content/OnlineShopApp",
   "Mode": "Default",
@@ -1103,6 +1103,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\Personal Projects\\asp.net-online-shop-app\\OnlineShopApp\\wwwroot\\img\\logo.png",
+      "SourceId": "OnlineShopApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Personal Projects\\asp.net-online-shop-app\\OnlineShopApp\\wwwroot\\",
+      "BasePath": "_content/OnlineShopApp",
+      "RelativePath": "img/logo.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\logo.png"
     },
     {
       "Identity": "D:\\Personal Projects\\asp.net-online-shop-app\\OnlineShopApp\\wwwroot\\js\\site.js",

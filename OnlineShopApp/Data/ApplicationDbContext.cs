@@ -10,6 +10,6 @@ namespace OnlineShopApp.Data
             : base(options)
         {
         }
-        DbSet<Product> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }
