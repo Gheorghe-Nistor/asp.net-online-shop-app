@@ -2454,23 +2454,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\George\\.nuget\\packages\\": {},
+    "C:\\Users\\gabi_\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Personal Projects\\asp.net-online-shop-app\\OnlineShopApp\\OnlineShopApp.csproj",
+      "projectUniqueName": "C:\\Users\\gabi_\\Desktop\\computer science\\C#\\Project\\OnlineShopApp\\OnlineShopApp.csproj",
       "projectName": "OnlineShopApp",
-      "projectPath": "D:\\Personal Projects\\asp.net-online-shop-app\\OnlineShopApp\\OnlineShopApp.csproj",
-      "packagesPath": "C:\\Users\\George\\.nuget\\packages\\",
-      "outputPath": "D:\\Personal Projects\\asp.net-online-shop-app\\OnlineShopApp\\obj\\",
+      "projectPath": "C:\\Users\\gabi_\\Desktop\\computer science\\C#\\Project\\OnlineShopApp\\OnlineShopApp.csproj",
+      "packagesPath": "C:\\Users\\gabi_\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\gabi_\\Desktop\\computer science\\C#\\Project\\OnlineShopApp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\George\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\gabi_\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
