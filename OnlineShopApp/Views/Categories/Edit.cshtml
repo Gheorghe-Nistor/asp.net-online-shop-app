@@ -6,9 +6,9 @@
 
 <form method="post" action="/Categories/Edit/@ViewBag.Category.Id">
 
-
-    <label>Nume categorie</label>
-    <br /> <input type="text" name="CategoryName" value="@ViewBag.Category.CategoryName" />
+    @Html.Label("CategoryName", "Nume categorie")
+    <br />
+    @Html.Editor("CategoryName")
     <br /><br />
 
     <button class="btn btn-success" type="submit">Modifica categoria</button>

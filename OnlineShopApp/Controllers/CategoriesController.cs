@@ -22,22 +22,24 @@ namespace OnlineShopApp.Controllers
             return View();
         }
 
-        public IActionResult Show(int id)
-        {
-            Category category = db.Categories.Find(id);
-            ViewBag.Category = category;
-
-            return View();
-        }
-
         public IActionResult New()
         {
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.Msg = TempData["message"].ToString();
+            }
             return View();
         }
 
         [HttpPost]
         public IActionResult New(Category c)
         {
+            var category = db.Categories.FirstOrDefault(cat => cat.CategoryName ==  c.CategoryName);
+            if (category != null)
+            {
+                TempData["message"] = "Categoria deja exista";
+                return RedirectToAction("New");
+            }
             try
             {
                 db.Categories.Add(c);
