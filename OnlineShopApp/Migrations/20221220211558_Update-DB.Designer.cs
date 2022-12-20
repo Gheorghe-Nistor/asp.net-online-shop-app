@@ -9,11 +9,11 @@ using OnlineShopApp.Data;
 
 #nullable disable
 
-namespace OnlineShopApp.Data.Migrations
+namespace OnlineShopApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221213171414_Updte_Category")]
-    partial class Updte_Category
+    [Migration("20221220211558_Update-DB")]
+    partial class UpdateDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -261,8 +261,14 @@ namespace OnlineShopApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double?>("Discount")
+                        .HasColumnType("float");
+
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()

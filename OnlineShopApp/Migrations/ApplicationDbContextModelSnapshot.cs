@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShopApp.Data;
 
 #nullable disable
 
-namespace OnlineShopApp.Data.Migrations
+namespace OnlineShopApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221215150421_UpdateDiscountDefaultValue")]
-    partial class UpdateDiscountDefaultValue
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,11 +266,12 @@ namespace OnlineShopApp.Data.Migrations
                         .HasColumnType("float");
 
                     b.Property<bool>("Status")
-                        .HasMaxLength(100)
                         .HasColumnType("bit");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -335,12 +334,17 @@ namespace OnlineShopApp.Data.Migrations
             modelBuilder.Entity("OnlineShopApp.Models.Product", b =>
                 {
                     b.HasOne("OnlineShopApp.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("OnlineShopApp.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
