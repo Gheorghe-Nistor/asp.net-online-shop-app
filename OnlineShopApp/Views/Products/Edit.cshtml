@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Editare produs";  
+}
+@model OnlineShopApp.Models.Product
+
+<h2 class="text-center mt-2">Editare produs</h2>
+<div class="container mt-1 col-6">
+            @using (Html.BeginForm(actionName: "Edit", controllerName: "Products",
+            method: FormMethod.Post,
+            routeValues: new {id = Model.Id}))
+            {
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+                @Html.LabelFor(m => m.Title, "Titlu")
+                <br />
+                @Html.TextBoxFor(m => m.Title, null, new { @class = "form-control"})
+                @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+
+                @Html.LabelFor(m => m.Description, "Descriere")
+                <br />
+                @Html.TextArea("Description", null, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+
+                @Html.LabelFor(m => m.Price, "Preț")
+                <br />
+                @Html.TextBoxFor(m => m.Price, null, new { @class = "form-control"})
+                @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
+
+                @Html.LabelFor(m => m.Discount, "Reducere")
+                <br />
+                @Html.TextBoxFor(m => m.Discount, null, new { @class = "form-control"})
+
+                <label>Selectati categoria</label>
+                @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.CategoriesList, "Value", "Text"), null, new { @class = "form-control" })
+                <br />
+                <button class="btn btn-success" type="submit">Modifică</button>
+            }
+</div>

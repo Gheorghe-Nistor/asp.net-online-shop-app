@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Afișare Produse";
+    var price = 0.0;
+}
+@if(@ViewBag.Message != null){
+    <p class="alert @ViewBag.MessageType">@ViewBag.Message </p>
+    <hr/>
+}
+
+<h2>Listă produse</h2>
+<hr />
+
+<a class="btn btn-primary" asp-area="" asp-controller="Products" asp-action="New">Adaugă produs</a>
+<a class="btn btn-secondary" asp-area="" asp-controller="Products" asp-action="Validate">Validare produse</a>
+<br />
+<br />
+
+<div class="d-flex flex-row">
+    @foreach (var product in @ViewBag.Products)
+    {
+        price = product.Price;
+        <a class="card"  href="/products/show/@product.Id" style="width: 18rem; color: black; text-decoration: none; margin-right:50px">
+           <div style="position: relative">
+                <img src="~/img/products/image_1.jpg" class="card-img-top" alt="Product image">
+                @if (product.Discount > 0)
+                {
+                    <p class="text-danger" style="position: absolute; top: 8px; left: 16px; font-weight: bold;">-@(product.Discount*100)%</p>
+                }
+          </div>
+          <div class="card-body">
+                <h5 class="card-title">@product.Title</h5>
+                @if(product.Discount > 0){
+                    <p class="card-text"><s>@String.Format("{0:0.00}", @product.Price) RON</s></p>
+                    price -= price * product.Discount;
+                }
+                <p class="card-text">@String.Format("{0:0.00}", @price) RON</p>
+                <p>Vândut de către Admin</p>
+                <div href="#" class="btn btn-primary justify-self-center">Adaugă în coș</div>
+           </div>
+        </a>
+    }
+</div>

@@ -1,5 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static Humanizer.On;
 
 namespace OnlineShopApp.Models
@@ -8,19 +11,27 @@ namespace OnlineShopApp.Models
     {
         [Key]
         public int Id { get; set; }
+        [DefaultValue(false)]
+        public bool Status { get; set; }
         [Required(ErrorMessage = "Titlul este obligatoriu")]
-        [StringLength(100, ErrorMessage = "Titlul nu poate avea mai mult de 100 de caractere")]
+        [MaxLength(100, ErrorMessage = "Titlul nu poate avea mai mult de 100 de caractere")]
         [MinLength(5, ErrorMessage = "Titlul nu poate avea mai puțin de 5 caractere")]
+
         public string? Title { get; set; }
         [Required(ErrorMessage = "Descrierea este obligatorie")]
         [MinLength(30, ErrorMessage = "Descrierea nu poate avea mai puțin de 50 caractere")]
         public string? Description { get; set; }
         [Required(ErrorMessage = "Prețul produsului este obligatoriu")]
-        [Range(1, 5000, ErrorMessage = "Prețul trebuie să fie între 1 și 5000 lei")]
+        [Range(1, 5000, ErrorMessage = "Prețul trebuie să fie cuprins între 0 și 1")]
         public double Price { get; set; }
+        [DefaultValue(0)]
+        //[Range(0, 1, ErrorMessage = "Valoarea discount-ului trebuie să fie cuprinsă între 0 și 1")]
+        public double? Discount { get; set; }
         public DateTime CreatedAt { get; set; }
         [Required(ErrorMessage = "Categoria este obligatorie")]
         public int CategoryId { get; set; }
         public virtual Category? Category { get; set; }
+        [NotMapped]
+        public IEnumerable<SelectListItem>? CategoriesList { get; set; }
     }
 }

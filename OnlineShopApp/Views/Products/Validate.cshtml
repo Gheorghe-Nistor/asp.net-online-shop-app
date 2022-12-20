@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Validare produse";
+}
+
+<h3>Validare produse</h3>
+<br/>
+<div class="bg-white bg-opacity-75 rounded" >
+    <table class="table" >
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Data adaugare</th>
+                <th scope="col">Contributor</th>
+                <th scope="col">Titlu</th>
+                <th scope="col">Categorie</th>
+                <th scope="col">Pret</th>
+                <th scope="col">Stoc</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var product in @ViewBag.Products)
+            {
+                <tr onclick="location.href = '@(Url.Action("Show", "Products", new { id = product.Id }))'" style="cursor: pointer">
+                    <td>@product.Id</td>
+                    <td>@product.CreatedAt</td>
+                    <td>Admin</td>
+                    <td>@product.Title</td>
+                    <td>@product.Category.CategoryName </td>
+                    <td>@product.Price RON</td>
+                    <td>N/A</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
