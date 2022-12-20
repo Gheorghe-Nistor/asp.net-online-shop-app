@@ -33,7 +33,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+       
             @if (@TempData["message"] != null)
             {
                 var message = TempData["message"];
@@ -45,14 +45,8 @@
                 <p class="alert @TempData["messageType"]"><i class="@emoji" style="margin-right: 5px;"></i> @message </p>
             }
             @RenderBody()
-        </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container text-center">
-            &copy; 2022 Nistor Gheorghe & Ispas Jany-Gabriel
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

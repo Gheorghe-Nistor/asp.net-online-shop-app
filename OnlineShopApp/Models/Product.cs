@@ -15,7 +15,7 @@ namespace OnlineShopApp.Models
         public bool Status { get; set; }
         [Required(ErrorMessage = "Titlul este obligatoriu;")]
         [MaxLength(100, ErrorMessage = "Titlul nu poate avea mai mult de 100 de caractere;")]
-        [MinLength(5, ErrorMessage = "Titlul nu poate avea mai puțin de 5 caractere;")]
+        [MinLength(3, ErrorMessage = "Titlul nu poate avea mai puțin de 3 caractere;")]
 
         public string? Title { get; set; }
         [Required(ErrorMessage = "Descrierea este obligatorie;")]

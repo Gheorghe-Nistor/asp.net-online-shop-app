@@ -16,17 +16,17 @@
                 @Html.LabelFor(m => m.Title, "Titlu")
                 <br />
                 @Html.TextBoxFor(m => m.Title, null, new { @class = "form-control"})
-                @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
+                //@Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
 
                 @Html.LabelFor(m => m.Description, "Descriere")
                 <br />
                 @Html.TextArea("Description", null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+                //@Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
 
                 @Html.LabelFor(m => m.Price, "Preț")
                 <br />
                 @Html.TextBoxFor(m => m.Price, null, new { @class = "form-control"})
-                @Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
+                //@Html.ValidationMessageFor(m => m.Price, null, new { @class = "text-danger" })
 
                 @Html.LabelFor(m => m.Discount, "Reducere")
                 <br />

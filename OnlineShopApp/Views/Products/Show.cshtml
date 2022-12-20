@@ -10,25 +10,46 @@
 {
     <a class="btn btn-success" asp-area="" asp-controller="Products" asp-action="Validate" asp-route-id="@ViewBag.Product.Id">Validează</a>
 }
-<a class="btn btn-primary" asp-area="" asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.Product.Id">Editează</a>
+<a class="btn btn-info" asp-area="" asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.Product.Id">Editează</a>
 <a class="btn btn-danger" asp-area="" asp-controller="Products" asp-action="Delete" asp-route-id="@ViewBag.Product.Id">Șterge</a>
-<a class="btn btn-warning" href="#">Adaugă în coș <i class="bi bi-basket"></i></a>
 
-<div class="d-flex align-items-baseline">
-    <p>@ViewBag.Product.Title</p> 
-    @if (@ViewBag.Product.Discount > 0)
-    {
-        <p class="text-danger" style="margin-left: 10px">-@(ViewBag.Product.Discount * 100)% reducere</p>
+
+<br/>
+<br />
+
+<style>
+    p, strong, s{
+        margin: 0;
     }
+</style>
+
+<div class="d-flex column">
+    <img src="~/img/products/image_1.jpg" style="width: auto;"/>
+    <div class="d-flex row" style="margin-left: 10px;">
+        <div class="d-flex align-items-baseline">
+            <h3 style="margin-bottom: 0px;">@ViewBag.Product.Title</h3>
+            @if (@ViewBag.Product.Discount > 0)
+            {
+                <p class="text-danger" style="margin-left: 10px">@(ViewBag.Product.Discount * 100)% reducere</p>
+            }
+        </div>
+        <div class="d-flex">
+            <p>5/5</p>
+            <i class="bi bi-star-fill" style="margin-left: 3px"></i>
+        </div>
+        <p>Categorie: @ViewBag.Product.Category.CategoryName</p>
+        <p>Vândut de către Admin</p>
+        @if (ViewBag.Product.Discount > 0)
+        {
+            <s class="text-secondary">Preț vechi @String.Format("{0:0.00}", @ViewBag.Product.Price) RON</s>
+            price -= price * ViewBag.Product.Discount;
+        }
+        <strong class="text-success">Preț @String.Format("{0:0.00}", @price) RON</strong>
+        <button type="submit" class="btn btn-warning" href="#" style="width: 180px;">Adaugă în coș <i class="bi bi-basket mx-1"></i></button>
+    </div>
 </div>
-<img src="~/img/products/image_1.jpg"/>
-
-    <p>Vândut de către Admin</p>
-    @if (ViewBag.Product.Discount > 0)
-    {
-        <p class="text-secondary"><s>Preț vechi @String.Format("{0:0.00}", @ViewBag.Product.Price) RON</s></p>
-        price -= price * ViewBag.Product.Discount;
-    }
-    <p>Preț @String.Format("{0:0.00}", @price) RON</p>
-
+<h5>Descriere </h5>
 <p>@ViewBag.Product.Description</p>
+<br />
+
+<h5>Recenzii </h5>

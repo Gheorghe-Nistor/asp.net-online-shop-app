@@ -15,12 +15,19 @@
     p, strong, s{
         margin: 3px 0;
     }
+    .product-card{
+        width: 24%;
+    }
+    a, a:hover{
+        text-decoration: none;
+        color: black;
+    }
 </style>
-<div class="d-flex flex-row">
+<div class="d-flex flex-row flex-wrap justify-content-between">
     @foreach (var product in @ViewBag.Products)
     {
         price = product.Price;
-        <a class="card"  href="/products/show/@product.Id" style="width: 18rem; color: black; text-decoration: none; margin-right:50px">
+        <a class="card product-card my-2"  href="/products/show/@product.Id">
            <div style="position: relative">
                 <img src="~/img/products/image_1.jpg" class="card-img-top" alt="Product image">
                 @if (product.Discount > 0)
@@ -39,7 +46,7 @@
                 </div>
                 <p>Categorie: @product.Category.CategoryName</p>
                 <p>Vândut de către Admin</p>
-                <div class="btn btn-warning my-2" style="width: 200px; margin: auto">Adaugă în coș <i class="bi bi-basket"></i></div>
+                <div class="btn btn-warning my-2" style="width: 70%; margin: auto">Adaugă în coș <i class="bi bi-basket"></i></div>
            </div>
         </a>
     }
