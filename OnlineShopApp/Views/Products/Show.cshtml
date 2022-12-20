@@ -3,14 +3,24 @@
     var price = ViewBag.Product.Price;
 }
 
+<h3>@ViewBag.Title</h3>
+<hr />
+
+@if (ViewBag.Product.Status == false)
+{
+    <a class="btn btn-success" asp-area="" asp-controller="Products" asp-action="Validate" asp-route-id="@ViewBag.Product.Id">Validează</a>
+}
+<a class="btn btn-primary" asp-area="" asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.Product.Id">Editează</a>
+<a class="btn btn-danger" asp-area="" asp-controller="Products" asp-action="Delete" asp-route-id="@ViewBag.Product.Id">Șterge</a>
+<a class="btn btn-warning" href="#">Adaugă în coș <i class="bi bi-basket"></i></a>
+
 <div class="d-flex align-items-baseline">
-    <h3>@ViewBag.Product.Title</h3> 
+    <p>@ViewBag.Product.Title</p> 
     @if (@ViewBag.Product.Discount > 0)
     {
         <p class="text-danger" style="margin-left: 10px">-@(ViewBag.Product.Discount * 100)% reducere</p>
     }
 </div>
-<hr />
 <img src="~/img/products/image_1.jpg"/>
 
     <p>Vândut de către Admin</p>
@@ -22,10 +32,3 @@
     <p>Preț @String.Format("{0:0.00}", @price) RON</p>
 
 <p>@ViewBag.Product.Description</p>
-
-@if (ViewBag.Product.Discount > 0)
-{
-    <a class="btn btn-secondary" href="/products/validate/@ViewBag.Product.Id">Validează</a>
-}
-<a class="btn btn-primary" asp-area="" asp-controller="Products" asp-action="Edit"  asp-route-id="@ViewBag.Product.Id">Editează</a>
-<a class="btn btn-danger" asp-area="" asp-controller="Products" asp-action="Delete" asp-route-id="@ViewBag.Product.Id" >Șterge</a>

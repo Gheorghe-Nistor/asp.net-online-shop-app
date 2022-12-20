@@ -2,13 +2,15 @@
     ViewBag.Title = "Adaugare Categorie";
 }   
 
-<h2>Adaugare Categorie</h2>
+<h2 class="text-center mt-2">@ViewBag.Title</h2>
+<div class="container mt-1 col-6">  
+    <form method="post" action="/Categories/New">
 
-<form method="post" action="/Categories/New">
-    @Html.Label("CategoryName", "Nume categorie")
-    <br />
-    @Html.TextBox("CategoryName", null, new { @class = "form-control" })
-    <p>@ViewBag.Msg</p>
-    <button class="btn btn-success" type="submit">Adauga categorie</button>
-</form>
+        @Html.Label("CategoryName", "Nume categorie")
+        <br />
+        @Html.TextBox("CategoryName", null, new { @class = "form-control" })
+        <p>@ViewBag.Msg</p>
+        <button class="btn btn-primary" type="submit">Adauga categorie</button>
+    </form>
+</div>
 

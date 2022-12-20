@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DIP | @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/OnlineShopApp.styles.css" asp-append-version="true" />
 </head>
@@ -17,7 +18,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-2" style="font-size: 1.4rem; font-weight:400">
+                    <ul class="navbar-nav flex-grow-2" style="font-size: 1.3rem; font-weight:400">
                         <li class="nav-item">
                             <a class="nav-link text-dark " asp-area="" asp-controller="Products" asp-action="Index">Produse</a>
                         </li>
@@ -25,7 +26,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categorii</a>
                         </li>
                     </ul>
-                    <a class="navbar-brand flex-grow-1 d-flex justify-content-center" asp-area="" asp-controller="Products" asp-action="Index"><img src="~/img/logo.png" width="190"></a>
+                    <a class="navbar-brand flex-grow-1 d-flex justify-content-center" asp-area="" asp-controller="Products" asp-action="Index"><img src="~/img/logo.png" width="175"></a>
                     <partial name="_LoginPartial"/>
                 </div>
             </div>
@@ -33,6 +34,16 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (@TempData["message"] != null)
+            {
+                var message = TempData["message"];
+                var messageType = TempData["messageType"];
+                var emoji = "bi bi-emoji-smile";
+
+                if (messageType == "alert-danger")
+                    emoji = "bi bi-emoji-frown";
+                <p class="alert @TempData["messageType"]"><i class="@emoji" style="margin-right: 5px;"></i> @message </p>
+            }
             @RenderBody()
         </main>
     </div>

@@ -1,11 +1,8 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineShopApp.Data;
 using OnlineShopApp.Models;
-using System.Reflection.Metadata.Ecma335;
 
 namespace OnlineShopApp.Controllers
 {
@@ -20,12 +17,6 @@ namespace OnlineShopApp.Controllers
         // HttpGet implicit
         public IActionResult Index()
         {
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.Message     = TempData["message"].ToString();
-                if(TempData.ContainsKey("messageType"))
-                    ViewBag.MessageType = TempData["messageType"].ToString();
-            }
             var products = db.Products.Include("Category")
                                       .Where(p => p.Status == true);
             ViewBag.Products = products;
@@ -34,49 +25,152 @@ namespace OnlineShopApp.Controllers
 
         // Se afișează toate produsele adăugate de către contribuitori care nu au fost încă validate
         // HtppGet Implicit
-        public IActionResult Validate()
+        public IActionResult Validate(int? id)
         {
-            var products = db.Products.Include("Category")
-                                      .Where(p => p.Status == false);
-            ViewBag.Products = products;
-            return View();
+            if (id == null)
+            {
+                var products = db.Products.Include("Category")
+                                          .Where(p => p.Status == false);
+                if (products.Count() > 0) {
+                    ViewBag.Products = products;
+                    return View();
+                }
+                TempData["message"] = "Toate produsele din baza de date sunt validate!";
+                TempData["messageType"] = "alert-success";
+                return RedirectToAction("Index");
+
+            } else
+            {
+                try 
+                {
+                    var product = db.Products.Where(p => p.Id == id)
+                                              .First();
+                    product.Status = true;
+                    db.SaveChanges();
+                    TempData["message"] = $"Produsul cu id-ul {id} a fost validat cu succes!";
+                    TempData["messageType"] = "alert-success";
+                }
+                catch(Exception)
+                {
+                    TempData["message"] = $"Nu s-a putut efectua operația de validare produs. ID-ul {id} nu corespounde niciunui produs din baza de date!";
+                    TempData["messageType"] = "alert-danger";
+                }
+                return RedirectToAction("Index");
+            }  
+        }
+        // Se afișează un singur produs cu id-ul dat, respectiv afișează mesaj de eroare în index
+        // HtppGet Implicit
+        public IActionResult Show(int id)
+        {
+            try
+            {
+                Product product = db.Products.Include("Category")
+                                          .Where(p => p.Id == id)
+                                          .First();
+                ViewBag.Product = product;
+                return View();
+            }
+            catch (Exception)
+            {
+                TempData["message"] = $"Nu s-a putut efectua operația de afișare produs. ID-ul {id} nu corespounde niciunui produs din baza de date!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("index");
+            }
         }
 
-        /*public IActionResult Validate(int id)
-        {
-            var product = db.Products.Where(p => p.Id == id)
-                                     .First();
-            product.Status = true;
-            TempData["message"] = $"Produsul cu id-ul {id} a fost validat!";
-            TempData["messageType"] = "alert-succes";
-            db.SaveChanges();
-            return View("Index");
-        } */
-        public IActionResult Show(int? id)
-        {
-            var product = db.Products.Find(id);
-            ViewBag.Product = product;
-            return View();
-        }
-        
+        // Se afișează un view cu un formular pentru adăugare produs doar dacă există cel puțin o categorie
+        // HtppGet Implicit
         public IActionResult New()
         {
-            Product product = new Product();
-            product.CategoriesList = GetAllCategories();
-            return View(product);
+            if(db.Categories.Count() != 0)
+            {
+                Product product = new Product();
+                product.CategoriesList = GetAllCategories();
+                return View(product);
+
+            }               
+            TempData["message"] = $"Nu s-a putut efectua operația de adăugare produs. Nu există nici o categorie în baza de date!";
+            TempData["messageType"] = "alert-danger";
+            return RedirectToAction("index");
         }
+
+        [HttpPost]
+        // Se adaugă produsul în baza de date dacă datele acestuia respectă toate constrângerile
         [HttpPost]
         public IActionResult New(Product product)
         {
             product.CreatedAt = DateTime.Now;
-           // if (ModelState.IsValid)
-           // {
+            if (ModelState.IsValid)
+            {
                 db.Products.Add(product);
                 db.SaveChanges();
-                TempData["message"] = "Produsul a fost adaugat cu succes. În maxim 24h un administrator va valida sau va șterge anunțul dvs.";
+                TempData["message"] = $"Produsul cu id-ul {product.Id} a fost adaugat cu succes!";
                 TempData["messageType"] = "alert-success";
-               
-            //}
+                return RedirectToAction("Show", new {@id = product.Id});
+            }
+            product.CategoriesList = GetAllCategories();
+            return View(product);
+        }
+        // Se afișează un view cu un formular pentru editare produs
+        public IActionResult Edit(int id)
+        {
+            try
+            {
+                Product product = db.Products.Include("Category")
+                                              .Where(p => p.Id == id)
+                                              .First();
+                product.CategoriesList = GetAllCategories();
+                return View(product);
+            }
+            catch (Exception)
+            {
+                TempData["message"] = $"Nu s-a putut efectua operația de editare produs. ID-ul {id} nu corespounde niciunui produs din baza de date!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Index");
+            }
+        }
+        // Se editează produsul din baza de date cu noile date din requestProdus
+        [HttpPost]
+        public IActionResult Edit(int id, Product requestProduct)
+        {
+            Product product = db.Products.Include("Category")
+                                          .Where(p => p.Id == id)
+                                          .First();
+            if (ModelState.IsValid)
+            {
+                product.Title = requestProduct.Title;
+                product.Description = requestProduct.Description;
+                product.Price = requestProduct.Price;
+                product.Discount = requestProduct.Discount;
+                product.CategoryId = requestProduct.CategoryId;
+                db.SaveChanges();
+                TempData["message"] = $"Produsul cu id-ul {id} a fost editat cu succes!";
+                TempData["messageType"] = "alert-success";
+                return RedirectToAction("Index");
+            }
+            requestProduct.CategoriesList = GetAllCategories();
+            return View(requestProduct);
+
+        }
+        // Se șterge produsul cu id-ul dat dacă acesta există în baza de date
+        // HtppGet Implicit
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                Product product = db.Products.Include("Category")
+                                          .Where(p => p.Id == id)
+                                          .First();
+                db.Products.Remove(product);
+                db.SaveChanges();
+                TempData["message"] = $"Produsul cu id-ul {id} a fost șters cu succes!";
+                TempData["messageType"] = "alert-success";
+            }
+            catch (Exception)
+            {
+                TempData["message"] = $"Nu s-a putut efectua operația de ștergere produs. ID-ul {id} nu corespounde niciunui produs din baza de date!";
+                TempData["messageType"] = "alert-danger";
+            }
             return RedirectToAction("Index");
         }
         public IEnumerable<SelectListItem> GetAllCategories()
@@ -99,38 +193,6 @@ namespace OnlineShopApp.Controllers
                 });
             }
             return selectList;
-        }
-        public IActionResult Edit(int id)
-        {
-            Product product = db.Products.Include("Category")
-                                          .Where(p => p.Id == id)
-                                          .First();
-            product.CategoriesList = GetAllCategories();
-            return View(product);
-        }
-        [HttpPost]
-        public IActionResult Edit(int id, Product requestProduct)
-        {
-            Product product = db.Products.Find(id);
-            if (ModelState.IsValid)
-            {
-                product.Title = requestProduct.Title;
-                product.CategoryId = requestProduct.CategoryId;
-                TempData["Message"] = "Produsul a fost modificat";
-                return RedirectToAction("Index");
-            }
-            requestProduct.CategoriesList = GetAllCategories();
-            return View(requestProduct);
-
-        }
-        public IActionResult Delete(int id)
-        {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
-            TempData["message"] = "Produsul a fost șters cu succes.";
-            TempData["messageType"] = "alert-success";
-            return RedirectToAction("Index");
         }
     }
 }

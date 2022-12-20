@@ -3,7 +3,9 @@
 }
 @model OnlineShopApp.Models.Product
 
-<h2 class="text-center mt-2">Editare produs</h2>
+<h3 class="text-center mt-2">@ViewBag.Title </h3>
+<hr />
+
 <div class="container mt-1 col-6">
             @using (Html.BeginForm(actionName: "Edit", controllerName: "Products",
             method: FormMethod.Post,
@@ -33,6 +35,9 @@
                 <label>Selectati categoria</label>
                 @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.CategoriesList, "Value", "Text"), null, new { @class = "form-control" })
                 <br />
-                <button class="btn btn-success" type="submit">Modifică</button>
+                <div class="d-flex justify-content-center">
+                    <a class="btn btn-secondary" asp-area="" asp-controller="Products" asp-action="Show" asp-route-id="@Model.Id" style="margin-right: 10px;">Înapoi afișare produs</a>
+                    <button class="btn btn-success" type="submit">Editează produsul</button>
+                </div>
             }
 </div>
