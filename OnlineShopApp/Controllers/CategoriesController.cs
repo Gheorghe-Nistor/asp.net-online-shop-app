@@ -12,6 +12,9 @@ namespace OnlineShopApp.Controllers
         {
             db = contex;
         }
+
+        // Sa se afiseze toate categoriile
+        // HttpGet implicit
         public IActionResult Index()
         {
             var categories = from category in db.Categories
@@ -22,61 +25,85 @@ namespace OnlineShopApp.Controllers
             return View();
         }
 
+        // Sa se afiseze un view cu un formular pentru adaugarea unei noi categorii diferite de cele existente deja
+        // HttpGet implicit
         public IActionResult New()
         {
-            if (TempData.ContainsKey("message"))
-            {
-                ViewBag.Msg = TempData["message"].ToString();
-            }
             return View();
         }
 
         [HttpPost]
+        // Se adaugă produsul în baza de date dacă datele acestuia respectă toate constrângerile
         public IActionResult New(Category c)
         {
             var category = db.Categories.FirstOrDefault(cat => cat.CategoryName ==  c.CategoryName);
             if (category != null)
             {
-                TempData["message"] = "Categoria deja exista";
-                return RedirectToAction("New");
+                TempData["message"] = "Nu s-a putut efectua operația de adaugare categorie. Aceasta exista deja in baza de date!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Index");
             }
-            try
+            if (ModelState.IsValid)
             {
                 db.Categories.Add(c);
                 db.SaveChanges();
+                TempData["message"] = $"Categoria cu id-ul {c.Id} a fost adaugat cu succes!";
+                TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
-            {
-                return View();
-            }
+            
+            return View(c);
+             
         }
 
-        public IActionResult Edit(int id, Category requestCategory)
+        public IActionResult Edit(int id)
         {
             try
             {
                 Category category = db.Categories.Find(id);
-                {
-                    category.CategoryName = requestCategory.CategoryName;
-                    db.SaveChanges();
-                }
+                return View(category);
+            }
+            catch(Exception)
+            {
+                TempData["message"] = $"Nu s-a putut efectua operația de editare categorie. ID-ul {id} nu corespounde niciunei categorii din baza de date!";
+                TempData["messageType"] = "alert-danger";
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public IActionResult Edit(int id, Category requestCategory)
+        {
 
+            Category category = db.Categories.Find(id);
+            if(ModelState.IsValid)
+            {
+                category.CategoryName = requestCategory.CategoryName;
+                db.SaveChanges();
+                TempData["message"] = $"Categoria cu id-ul {id} a fost editată cu succes!";
+                TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
-            catch(Exception e)
-            {
-                ViewBag.Category = requestCategory;
-                return View();
-            }
+            return View(requestCategory);
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public ActionResult Delete(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
-            db.SaveChanges();
+
+            try
+            {
+                Category category = db.Categories.Find(id);
+                db.Categories.Remove(category);
+                db.SaveChanges();
+                TempData["message"] = $"Categoria cu id-ul {id} a fost ștearsă cu succes!";
+                TempData["messageType"] = "alert-success";
+                return RedirectToAction("Index");
+            }
+            catch (Exception)
+            {
+                TempData["message"] = $"Nu s-a putut efectua operația de ștergere categorie. ID-ul {id} nu corespounde niciunei categorii din baza de date!";
+                TempData["messageType"] = "alert-danger";
+            }
             return RedirectToAction("Index");
         }
     }

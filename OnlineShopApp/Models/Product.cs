@@ -32,5 +32,6 @@ namespace OnlineShopApp.Models
         public virtual Category? Category { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? CategoriesList { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }
