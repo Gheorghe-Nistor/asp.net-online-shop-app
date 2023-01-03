@@ -10,7 +10,7 @@
 
 @if (ViewBag.Product.Status == false)
 {
-    <a class="btn btn-success" asp-area="" asp-controller="Products" asp-action="Validate" asp-route-id="@ViewBag.Product.Id">Validează</a>
+        <a class="btn btn-success" asp-area="" asp-controller="Products" asp-action="Validate" asp-route-id="@ViewBag.Product.Id">Validează</a>
 }
 <a class="btn btn-info" asp-area="" asp-controller="Products" asp-action="Edit" asp-route-id="@ViewBag.Product.Id">Editează</a>
 <a class="btn btn-danger" asp-area="" asp-controller="Products" asp-action="Delete" asp-route-id="@ViewBag.Product.Id">Șterge</a>
@@ -32,7 +32,7 @@
             <h3 style="margin-bottom: 0px;">@ViewBag.Product.Title</h3>
             @if (@ViewBag.Product.Discount > 0)
             {
-                <p class="text-danger" style="margin-left: 10px">@(ViewBag.Product.Discount * 100)% reducere</p>
+                    <p class="text-danger" style="margin-left: 10px">@(ViewBag.Product.Discount * 100)% reducere</p>
             }
         </div>
         <div class="d-flex">
@@ -43,7 +43,7 @@
         <p>Vândut de către Admin</p>
         @if (ViewBag.Product.Discount > 0)
         {
-            <s class="text-secondary">Preț vechi @String.Format("{0:0.00}", @ViewBag.Product.Price) RON</s>
+                <s class="text-secondary">Preț vechi @String.Format("{0:0.00}", @ViewBag.Product.Price) RON</s>
             price -= price * ViewBag.Product.Discount;
         }
         <strong class="text-success">Preț @String.Format("{0:0.00}", @price) RON</strong>
@@ -59,3 +59,93 @@
 
 <br />
 <br />
+
+@* Afisare comentarii impreuna cu butoanele de editare si stergere *@
+
+@foreach (var comm in ViewBag.Product.Comments)
+{
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2"></div>
+
+                <div class="col-md-8">
+
+                    <div>
+
+                        <p>@comm.Content</p>
+                        <small>@comm.Date</small>
+
+                    </div>
+                    <br>
+
+                    <div class="d-flex">
+
+                        <div>
+
+                            <a class="btn btn-outline-primary" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
+
+                        </div>
+
+                        <div>
+
+                            <form method="post" action="/Comments/Delete/@comm.Id">
+
+                                <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Sterge</button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    <br />
+
+                </div>
+
+                <div class="col-md-2"></div>
+
+            </div>
+
+        </div>
+}
+
+
+@* Afisarea formularului in care se poate adauga un comentariu *@
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-2"></div>
+
+        <div class="col-md-8">
+
+            <div class="card">
+
+                <form method="post" action="/Comments/New">
+
+                    <div class="card-body">
+
+                        <input type="hidden" name="ProductId" value="@ViewBag.Product.Id" />
+
+                        <label>Continut comentariu</label>
+                        <br />
+
+                        <textarea class="form-control" name="Content"></textarea>
+                        <br />
+
+                        <button class="btn btn-success " type="submit">Adauga comentariul</button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-2"></div>
+
+    </div>
+
+</div>

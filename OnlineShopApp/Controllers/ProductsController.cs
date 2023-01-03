@@ -64,7 +64,7 @@ namespace OnlineShopApp.Controllers
         {
             try
             {
-                Product product = db.Products.Include("Category")
+                Product product = db.Products.Include("Category").Include("Comments")
                                           .Where(p => p.Id == id)
                                           .First();
                 ViewBag.Product = product;
