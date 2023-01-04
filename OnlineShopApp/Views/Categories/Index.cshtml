@@ -1,13 +1,46 @@
 ﻿
 @{
-    ViewBag.Title = "Lista categorii";
+    ViewBag.Title = "Listă categorii";
 }
-<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Title</h3>
 <hr />
+
 <a class="btn btn-primary" href="/Categories/New">Adaugă categorie</a>
 <br />
 <br />
+
+
 <style>
+    .product-card{
+        width: 24%;
+    }
+    a, a:hover{
+        text-decoration: none;
+        color: black;
+    }
+    button {
+        width: 100%;
+    }
+</style>
+
+<div class="d-flex flex-row flex-wrap justify-content-between">
+    @foreach (var category in @ViewBag.Categories)
+    {
+        <div class="card product-card my-2">
+
+            <div class="d-flex flex-column justify-content-center text-center">
+                <h5 class="card-title mt-1">@category.CategoryName</h5>
+            </div>
+            <a class="btn alert-primary" href="/Categories/Edit/@category.Id">Editează categoria</a>
+            <form method="post" action="/Categories/Delete/@category.Id">
+                <button class="btn btn-danger" type="submit">Șterge categoria</button>
+            </form>
+        </div>
+    }
+</div>
+
+
+@*<style>
     a, form {
         display: inline-block;
     }
@@ -22,5 +55,5 @@
     </form>
     <br />
     <br />
-}
+}*@
 
