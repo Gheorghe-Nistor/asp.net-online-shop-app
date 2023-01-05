@@ -11,7 +11,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Data adaugare</th>
-                <th scope="col">Contributor</th>
+                <th scope="col">Colaborator</th>
                 <th scope="col">Titlu</th>
                 <th scope="col">Categorie</th>
                 <th scope="col">Pret</th>
@@ -24,7 +24,7 @@
                 <tr onclick="location.href = '@(Url.Action("Show", "Products", new { id = product.Id }))'" style="cursor: pointer">
                     <td>@product.Id</td>
                     <td>@product.CreatedAt</td>
-                    <td>Admin</td>
+                    <td>@product.User.UserName</td>
                     <td>@product.Title</td>
                     <td>@product.Category.CategoryName </td>
                     <td>@product.Price RON</td>

@@ -40,7 +40,7 @@
                 var messageType = TempData["messageType"];
                 var emoji = "bi bi-emoji-smile";
 
-                if (messageType == "alert-danger")
+            if (messageType != null && messageType.ToString() == "alert-danger")
                     emoji = "bi bi-emoji-frown";
                 <p class="alert @TempData["messageType"]"><i class="@emoji" style="margin-right: 5px;"></i> @message </p>
             }

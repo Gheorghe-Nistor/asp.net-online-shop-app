@@ -1,35 +1,55 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineShopApp.Data;
 using OnlineShopApp.Models;
+using System.Xml.Schema;
 
 namespace OnlineShopApp.Controllers
 {
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext db;
-        public ProductsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public ProductsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             db = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
+
+        private void SetAccesRights()
+        {
+            ViewBag.CurrentUser = _userManager.GetUserId(User);
+            ViewBag.isUser = User.IsInRole("User");
+            ViewBag.isCollaborator = User.IsInRole("Collaborator");
+            ViewBag.isAdmin = User.IsInRole("Admin");
+        }
+
         // Se afișează toate produsele validate împreună cu categoria din care fac parte
         // HttpGet implicit
         public IActionResult Index()
         {
             var products = db.Products.Include("Category")
+                                      .Include("User")
                                       .Where(p => p.Status == true);
             ViewBag.Products = products;
+            SetAccesRights();
             return View();
         }
 
         // Se afișează toate produsele adăugate de către contribuitori care nu au fost încă validate
         // HtppGet Implicit
+        [Authorize(Roles ="Admin")]
         public IActionResult Validate(int? id)
         {
             if (id == null)
             {
                 var products = db.Products.Include("Category")
+                                          .Include("User")
                                           .Where(p => p.Status == false);
                 if (products.Count() > 0) {
                     ViewBag.Products = products;
@@ -64,10 +84,13 @@ namespace OnlineShopApp.Controllers
         {
             try
             {
-                Product product = db.Products.Include("Category").Include("Comments")
-                                          .Where(p => p.Id == id)
-                                          .First();
+                Product product = db.Products.Include("Category")
+                                             .Include("User") 
+                                             .Include("Comments")
+                                             .Where(p => p.Id == id)
+                                             .First();
                 ViewBag.Product = product;
+                SetAccesRights();
                 return View();
             }
             catch (Exception)
@@ -79,7 +102,8 @@ namespace OnlineShopApp.Controllers
         }
 
         // Se afișează un view cu un formular pentru adăugare produs doar dacă există cel puțin o categorie
-        // HtppGet Implicit
+        // HttpGet Implicit
+        [Authorize(Roles = "Collaborator,Admin")]
         public IActionResult New()
         {
             if(db.Categories.Count() != 0)
@@ -94,12 +118,15 @@ namespace OnlineShopApp.Controllers
             return RedirectToAction("index");
         }
 
-        [HttpPost]
+
         // Se adaugă produsul în baza de date dacă datele acestuia respectă toate constrângerile
         [HttpPost]
+        [Authorize(Roles = "Collaborator,Admin")]
         public IActionResult New(Product product)
         {
             product.CreatedAt = DateTime.Now;
+            product.UserId = _userManager.GetUserId(User);
+            product.CategoriesList = GetAllCategories();
             if (ModelState.IsValid)
             {
                 db.Products.Add(product);
@@ -108,19 +135,24 @@ namespace OnlineShopApp.Controllers
                 TempData["messageType"] = "alert-success";
                 return RedirectToAction("Show", new {@id = product.Id});
             }
-            product.CategoriesList = GetAllCategories();
             return View(product);
         }
-        // Se afișează un view cu un formular pentru editare produs
+        // Editarea unui produs cu id-ul dat
+        [Authorize(Roles = "Collaborator,Admin")]
         public IActionResult Edit(int id)
         {
             try
             {
                 Product product = db.Products.Include("Category")
-                                              .Where(p => p.Id == id)
-                                              .First();
+                                             .Include("User")
+                                             .Where(p => p.Id == id)
+                                             .First();
                 product.CategoriesList = GetAllCategories();
-                return View(product);
+                if(product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+                    return View(product);
+                TempData["message"] = $"Nu aveți dreptul să aduceți modificări asupra unui produs care nu vă aparține!";
+                TempData["messageType"] = "alert-danger";
+                return RedirectToAction("Index");
             }
             catch (Exception)
             {
@@ -131,21 +163,29 @@ namespace OnlineShopApp.Controllers
         }
         // Se editează produsul din baza de date cu noile date din requestProdus
         [HttpPost]
+        [Authorize(Roles = "Collaborator,Admin")]
         public IActionResult Edit(int id, Product requestProduct)
         {
             Product product = db.Products.Include("Category")
-                                          .Where(p => p.Id == id)
-                                          .First();
+                                         .Include("User")
+                                         .Where(p => p.Id == id)
+                                         .First();
             if (ModelState.IsValid)
             {
-                product.Title = requestProduct.Title;
-                product.Description = requestProduct.Description;
-                product.Price = requestProduct.Price;
-                product.Discount = requestProduct.Discount;
-                product.CategoryId = requestProduct.CategoryId;
-                db.SaveChanges();
-                TempData["message"] = $"Produsul cu id-ul {id} a fost editat cu succes!";
-                TempData["messageType"] = "alert-success";
+                if (product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+                {
+                    product.Title = requestProduct.Title;
+                    product.Description = requestProduct.Description;
+                    product.Price = requestProduct.Price;
+                    product.Discount = requestProduct.Discount;
+                    product.CategoryId = requestProduct.CategoryId;
+                    db.SaveChanges();
+                    TempData["message"] = $"Produsul cu id-ul {id} a fost editat cu succes!";
+                    TempData["messageType"] = "alert-success";
+                    return RedirectToAction("Index");
+                }
+                TempData["message"] = $"Nu aveți dreptul să aduceți modificări asupra unui produs care nu vă aparține!";
+                TempData["messageType"] = "alert-danger";
                 return RedirectToAction("Index");
             }
             requestProduct.CategoriesList = GetAllCategories();
@@ -154,6 +194,7 @@ namespace OnlineShopApp.Controllers
         }
         // Se șterge produsul cu id-ul dat dacă acesta există în baza de date
         // HtppGet Implicit
+        [Authorize(Roles = "Collaborator,Admin")]
         public IActionResult Delete(int id)
         {
             try
@@ -161,10 +202,15 @@ namespace OnlineShopApp.Controllers
                 Product product = db.Products.Include("Category")
                                           .Where(p => p.Id == id)
                                           .First();
-                db.Products.Remove(product);
-                db.SaveChanges();
-                TempData["message"] = $"Produsul cu id-ul {id} a fost șters cu succes!";
-                TempData["messageType"] = "alert-success";
+                if (product.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
+                {
+                    db.Products.Remove(product);
+                    db.SaveChanges();
+                    TempData["message"] = $"Produsul cu id-ul {id} a fost șters cu succes!";
+                    TempData["messageType"] = "alert-success";
+                }
+                TempData["message"] = $"Nu aveți dreptul să ștergeți un produs care nu vă aparține!";
+                TempData["messageType"] = "alert-danger";
             }
             catch (Exception)
             {

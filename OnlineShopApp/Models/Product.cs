@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static Humanizer.On;
 
 namespace OnlineShopApp.Models
 {
@@ -30,6 +29,7 @@ namespace OnlineShopApp.Models
         public DateTime CreatedAt { get; set; }
         public int? CategoryId { get; set; }
         public string? UserId { get; set; } 
+        public virtual ApplicationUser? User { get; set; } // un produs aparține unui singur utilizator
         public virtual Category? Category { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? CategoriesList { get; set; }
