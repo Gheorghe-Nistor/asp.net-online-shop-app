@@ -51,10 +51,13 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "EditCartItem",
+    pattern: "{controller=ShoppingCart}/{action=Edit}/{id?}/{value?}");
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Products}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();
-
-// MINUTUL 1:29:00

@@ -7,8 +7,9 @@
 <hr />
 
 <div class="container col-6">
-            @using (Html.BeginForm(actionName: "New", controllerName: "Products",
-            method: FormMethod.Post))
+    @using (Html.BeginForm(actionName: "New", controllerName: "Products", 
+    method: FormMethod.Post, 
+    new { enctype = "multipart/form-data" }))
             {
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
          
@@ -36,6 +37,10 @@
 
                 <label>Selectati categoria</label>
                 @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.CategoriesList, "Value", "Text"), null, new { @class = "form-control" })
+
+                @Html.Label("Image", "Imagine")
+                <br />
+                @Html.TextBox("Image", null, new { @class = "form-control", @type="file"})
                 <br />
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary" type="submit">Adaugă produs</button>

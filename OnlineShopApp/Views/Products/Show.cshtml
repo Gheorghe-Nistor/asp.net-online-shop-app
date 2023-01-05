@@ -26,7 +26,7 @@
 </style>
 
 <div class="d-flex column">
-    <img src="~/img/products/image_1.jpg" style="width: auto;"/>
+    <img style="height: 300px" src="@Url.Content(string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(ViewBag.Product.Image)))" style="height: 1;" />
     <div class="d-flex row" style="margin-left: 10px;">
         <div class="d-flex align-items-baseline">
             <h3 style="margin-bottom: 0px;">@ViewBag.Product.Title</h3>
@@ -47,7 +47,7 @@
             price -= price * ViewBag.Product.Discount;
         }
         <strong class="text-success">Preț @String.Format("{0:0.00}", @price) RON</strong>
-        <button type="submit" class="btn btn-warning" href="#" style="width: 180px;">Adaugă în coș <i class="bi bi-basket mx-1"></i></button>
+        <a type="submit" class="btn btn-warning text-center" style="width: 180px;" asp-area="" asp-controller="ShoppingCart" asp-action="Add" asp-route-id="@ViewBag.Product.Id">Adaugă în coș <i class="bi bi-basket mx-1"></i></a>
     </div>
 </div>
 <br />
@@ -58,7 +58,6 @@
 <br />
 
 @* Afișare recenzii împreună cu butoanele de editare si ștergere *@
-
 @foreach (var comm in ViewBag.Product.Comments)
 {
         <div class="container">
@@ -88,7 +87,7 @@
 }
 
 @* Afisarea formularului in care se poate adauga un comentariu *@
-@if(ViewBag.IsUser)
+@if(ViewBag.CurrentUser != null)
 {
     <div class="container">
         <div class="row">

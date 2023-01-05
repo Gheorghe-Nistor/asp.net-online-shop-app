@@ -9,7 +9,7 @@
 <div class="container mt-1 col-6">
             @using (Html.BeginForm(actionName: "Edit", controllerName: "Products",
             method: FormMethod.Post,
-            routeValues: new {id = Model.Id}))
+            new { enctype = "multipart/form-data", id = Model.Id }))
             {
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
@@ -34,6 +34,10 @@
 
                 <label>Selectati categoria</label>
                 @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.CategoriesList, "Value", "Text"), null, new { @class = "form-control" })
+
+                @Html.Label("Image", "Imagine")
+                <br />
+                @Html.TextBox("Image", null, new { @class = "form-control", @type="file"})
                 <br />
                 <div class="d-flex justify-content-center">
                     <a class="btn btn-secondary" asp-area="" asp-controller="Products" asp-action="Show" asp-route-id="@Model.Id" style="margin-right: 10px;">Înapoi afișare produs</a>

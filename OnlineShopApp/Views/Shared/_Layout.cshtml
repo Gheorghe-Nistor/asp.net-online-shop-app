@@ -18,36 +18,49 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-2" style="font-size: 1.3rem; font-weight:400">
+                    <ul class="navbar-nav flex-grow-2 align-items-center" style="font-size: 1.2rem; font-weight:400">
                         <li class="nav-item">
-                            <a class="nav-link text-dark " asp-area="" asp-controller="Products" asp-action="Index">Produse</a>
+                            <a class="navbar-brand" asp-area="" asp-controller="Products" asp-action="Index"><img src="~/img/logo.png" width="120"></a>
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categorii</a>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark " asp-area="" asp-controller="Products" asp-action="Index">Listă produse</a>
+                        </li>
+                        @if ((ViewBag.isCollaborator != null && ViewBag.isCollaborator) || (ViewBag.isAdmin != null && ViewBag.isAdmin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark " asp-area="" asp-controller="Products" asp-action="New">Adăugare produs</a>
+                            </li>
+                        }
+                        @if ((ViewBag.isAdmin != null && ViewBag.isAdmin))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categorii</a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Index"><i class="bi bi-cart"></i> Coș</a>
                         </li>
                     </ul>
-                    <a class="navbar-brand flex-grow-1 d-flex justify-content-center" asp-area="" asp-controller="Products" asp-action="Index"><img src="~/img/logo.png" width="175"></a>
                     <partial name="_LoginPartial"/>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
-       
-            @if (@TempData["message"] != null)
-            {
-                var message = TempData["message"];
-                var messageType = TempData["messageType"];
-                var emoji = "bi bi-emoji-smile";
+        @if (@TempData["message"] != null)
+        {
+            var message = TempData["message"];
+            var messageType = TempData["messageType"];
+            var emoji = "bi bi-emoji-smile";
 
             if (messageType != null && messageType.ToString() == "alert-danger")
-                    emoji = "bi bi-emoji-frown";
-                <p class="alert @TempData["messageType"]"><i class="@emoji" style="margin-right: 5px;"></i> @message </p>
-            }
-            @RenderBody()
+                emoji = "bi bi-emoji-frown";
+            <p class="alert @messageType"><i class="@emoji" style="margin-right: 5px;"></i> @message </p>
+        }
+        @RenderBody()
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <br/>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -1,0 +1,18 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmare înregistrare";
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+<br />
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+        <p>
+            Apasă click pe acest <a id="confirm-link" href="@Model.EmailConfirmationUrl">link</a> pentru a-ți activa contul.
+        </p>
+    }
+}
+

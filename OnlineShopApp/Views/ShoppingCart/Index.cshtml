@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Coș produse";
+    int index = 0;
+    double totalPrice = 0;
+    double price;
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+<br/>
+
+<div class="bg-white bg-opacity-75 rounded">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Nr. crt</th>
+                <th scope="col">Produs</th>
+                <th scope="col">Colaborator</th>
+                <th scope="col">Cantitate</th>
+                <th scope="col">Pret</th>
+                <th scope="col">Acțiune</th>
+            </tr>
+        </thead>
+        <tbody>        
+            @foreach (var cartItem in @ViewBag.CartItems)
+            {
+                price = cartItem.Product.Price - cartItem.Product.Discount * cartItem.Product.Price;
+                <tr>
+                    <td>@(index++)</td>
+                    <td>@cartItem.Product.Title</td>
+                    <td>@cartItem.Product.User.UserName</td>
+                    <td>@cartItem.Quantity</td>
+                    <td>@price RON</td>
+                    <td>
+                        <a class="btn btn-danger" href="/ShoppingCart/Edit/@cartItem.Product.Id/-1">-1</a>
+                        <a class="btn btn-success" href="/ShoppingCart/Edit/@cartItem.Product.Id/+1">+1</a>
+                    </td>
+                </tr>
+                totalPrice += price * @cartItem.Quantity;
+            }
+        </tbody>
+    </table>
+      <strong>Preț total: @totalPrice RON</strong>
+</div>

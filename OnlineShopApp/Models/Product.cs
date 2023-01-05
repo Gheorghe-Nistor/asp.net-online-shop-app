@@ -27,7 +27,8 @@ namespace OnlineShopApp.Models
         [Range(0, 1, ErrorMessage = "Valoarea discount-ului trebuie să fie cuprinsă între 0 și 1;")]
         public double? Discount { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int? CategoryId { get; set; }
+        public byte[]? Image { get; set; }
+        public int? CategoryId { get; set; } 
         public string? UserId { get; set; } 
         public virtual ApplicationUser? User { get; set; } // un produs aparține unui singur utilizator
         public virtual Category? Category { get; set; }
