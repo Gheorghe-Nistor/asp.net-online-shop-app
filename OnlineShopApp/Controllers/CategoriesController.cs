@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Data;
 using OnlineShopApp.Models;
 
 namespace OnlineShopApp.Controllers
 {
+    [Authorize(Roles="Admin")]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext db;

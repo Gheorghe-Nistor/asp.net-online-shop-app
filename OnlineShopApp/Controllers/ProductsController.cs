@@ -96,6 +96,7 @@ namespace OnlineShopApp.Controllers
                 Product product = db.Products.Include("Category")
                                              .Include("User") 
                                              .Include("Comments")
+                                             .Include("Comments.User")
                                              .Where(p => p.Id == id)
                                              .First();
                 ViewBag.Product = product;
@@ -107,6 +108,76 @@ namespace OnlineShopApp.Controllers
                 TempData["messageType"] = "alert-danger";
                 return RedirectToAction("index");
             }
+        }
+
+        /*
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public IActionResult Show([FromForm] Comment comment)
+        {
+            comment.Date = DateTime.Now;
+            comment.UserId = _userManager.GetUserId(User);
+
+            if (ModelState.IsValid)
+            {
+                db.Comments.Add(comment);
+                db.SaveChanges();
+                return Redirect("/Products/Show/" + comment.ProductId);
+            }
+
+            else
+            {
+                Product product = db.Products.Include("Category")
+                                         .Include("User")
+                                         .Include("Comments")
+                                         .Include("Comments.User")
+                                         .Where(p => p.Id == comment.ProductId)
+                                         .First();
+
+
+                SetAccesRights();
+
+                return View(comment);
+            }
+        }
+        */
+
+        [HttpPost]
+        [Authorize(Roles = "User,Editor,Admin")]
+        public IActionResult Show([FromForm] Comment comm)
+        {
+            comm.Date = DateTime.Now;
+            comm.UserId = _userManager.GetUserId(User);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    db.Comments.Add(comm);
+                    db.SaveChanges();
+                    TempData["message"] = $"Comentariul cu id-ul {comm.Id} a fost adăugat cu succes!";
+                    TempData["messageType"] = "alert-success";
+                    return Redirect("/Products/Show/" + comm.ProductId);
+                }
+                catch (Exception)
+                {
+                    return Redirect("/Products/Show/" + comm.ProductId);
+                }
+            }
+            else
+            {
+                Product product = db.Products.Include("Category")
+                                         .Include("User")
+                                         .Include("Comments")
+                                         .Include("Comments.User")
+                                         .Where(p => p.Id == comm.ProductId)
+                                         .First();
+
+
+                SetAccesRights();
+
+                return View(comm);
+            }
+
         }
 
         // Se afișează un view cu un formular pentru adăugare produs doar dacă există cel puțin o categorie
