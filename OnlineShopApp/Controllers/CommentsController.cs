@@ -29,29 +29,6 @@ namespace OnlineShopApp.Controllers
             _roleManager = roleManager;
         }
 
-        /*
-        [HttpPost]
-        public IActionResult New(Comment comm)
-        {
-            comm.Date = DateTime.Now;
-
-            try
-            {
-                db.Comments.Add(comm);
-                db.SaveChanges();
-                TempData["message"] = $"Comentariul cu id-ul {comm.Id} a fost adăugat cu succes!";
-                TempData["messageType"] = "alert-success";
-                return Redirect("/Products/Show/" + comm.ProductId);
-            }
-
-            catch (Exception)
-            {
-                return Redirect("/Products/Show/" + comm.ProductId);
-            }
-
-        }
-        */
-
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Edit(int id)
         {
@@ -64,7 +41,7 @@ namespace OnlineShopApp.Controllers
                 }
                 else
                 {
-                    TempData["message"] = "Nu aveți dreptul să editați comentariul";
+                    TempData["message"] = "Nu aveți dreptul să editați recenzia";
                     TempData["messageType"] = "alert-danger";
                     return RedirectToAction("Index", "Products");
                 }
@@ -72,7 +49,7 @@ namespace OnlineShopApp.Controllers
             }
             catch (Exception)
             {
-                TempData["message"] = $"Nu s-a putut efectua operația de editare comentariul. ID-ul {id} nu corespounde niciunui comentariu din baza de date!";
+                TempData["message"] = $"Nu s-a putut efectua operația de editare recenzie.";
                 TempData["messageType"] = "alert-danger";
                 return RedirectToAction("Index", "Products");
             }
@@ -91,7 +68,7 @@ namespace OnlineShopApp.Controllers
                     comment.Content = requestComment.Content;
                     comment.Rating = requestComment.Rating;
                     db.SaveChanges();
-                    TempData["message"] = $"Comentariul cu id-ul {id} a fost modificat cu succes!";
+                    TempData["message"] = $"Recenzia a fost modificată cu succes!";
                     TempData["messageType"] = "alert-success";
                     return Redirect("/Products/Show/" + comment.ProductId);
                 }
@@ -119,13 +96,13 @@ namespace OnlineShopApp.Controllers
                 {
                     db.Comments.Remove(comment);
                     db.SaveChanges();
-                    TempData["message"] = $"Comentariul cu id-ul {id} a fost șters cu succes!";
+                    TempData["message"] = $"Recenzia a fost ștearsă cu succes!";
                     TempData["messageType"] = "alert-success";
                     return Redirect("/Products/Show/" + comment.ProductId);
                 }
                 else
                 {
-                    TempData["message"] = "Nu aveți dreptul să ștergeți comentariul";
+                    TempData["message"] = "Nu aveți dreptul să ștergeți recenzia";
                     TempData["messageType"] = "alert-danger";
                     return RedirectToAction("Index", "Products");
                 }
@@ -133,7 +110,7 @@ namespace OnlineShopApp.Controllers
 
             catch(Exception)
             {
-                TempData["message"] = $"Nu s-a putut efectua operația de ștergere comentariul. ID-ul {id} nu corespounde niciunui comentariu din baza de date!";
+                TempData["message"] = $"Nu s-a putut efectua operația de ștergere recenzie.";
                 TempData["messageType"] = "alert-danger";
             }
             return Redirect("/Products");

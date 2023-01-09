@@ -41,34 +41,28 @@ namespace OnlineShopApp.Controllers
                                       .Include("User")
                                       .Where(p => p.Status == true);
 
+            foreach (var product in products)
+            {
+                var rating = from c in db.Comments
+                             where c.ProductId == product.Id
+                             select c.Rating;
+                product.Rating = rating.Average();
+            }
+            db.SaveChanges();
 
-            var average_rating = from c in db.Comments
-                                 group c by c.ProductId into g
-                                 select new
-                                 {
-                                     ProductId = g.Key,
-                                     AverageRating = g.Average(c => c.Rating)
-                                 };
 
-
-            ViewBag.AverageRating = average_rating;
 
             var search = "";
 
             if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
             {
                 search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
-
-                //products = db.Products.Include("Category")
-                //        .Include("User")
-                //        .Where(p => p.Status == true && p.Title.Contains(search));
                 products = products.Where(p => p.Title.Contains(search));
             }
 
             var order = "";
 
             
-
             if (Convert.ToString(HttpContext.Request.Query["order"]) != null)
             {
                 order = Convert.ToString(HttpContext.Request.Query["order"]);
@@ -80,12 +74,13 @@ namespace OnlineShopApp.Controllers
                     case "Pret descendent":
                         products = products.OrderByDescending(p => (p.Price - p.Price * p.Discount));
                         break;
-                        //case "Rating ascendent":
-                        //    products = products.OrderBy(p => p.Rating).ToList();
-                        //    break;
-                        //case "Rating descendent":
-                        //    products = products.OrderByDescending(p => p.Rating).ToList();
-                        //    break;
+                    case "Rating ascendent":
+                        //products = products.OrderBy(p => p.Rating);
+                        products = products.OrderBy(p => p.Rating ?? double.MaxValue);
+                        break;
+                    case "Rating descendent":
+                        products = products.OrderByDescending(p => p.Rating);
+                        break;
                 }
             }
 
@@ -158,6 +153,11 @@ namespace OnlineShopApp.Controllers
                                              .Include("Comments.User")
                                              .Where(p => p.Id == id)
                                              .First();
+                var rating = from c in db.Comments
+                                where c.ProductId == product.Id
+                                select c.Rating;
+                product.Rating = rating.Average();
+                db.SaveChanges();
                 ViewBag.Product = product;
                 return View(product);
             }
@@ -169,37 +169,6 @@ namespace OnlineShopApp.Controllers
             }
         }
 
-        /*
-        [HttpPost]
-        [Authorize(Roles = "User,Editor,Admin")]
-        public IActionResult Show([FromForm] Comment comment)
-        {
-            comment.Date = DateTime.Now;
-            comment.UserId = _userManager.GetUserId(User);
-
-            if (ModelState.IsValid)
-            {
-                db.Comments.Add(comment);
-                db.SaveChanges();
-                return Redirect("/Products/Show/" + comment.ProductId);
-            }
-
-            else
-            {
-                Product product = db.Products.Include("Category")
-                                         .Include("User")
-                                         .Include("Comments")
-                                         .Include("Comments.User")
-                                         .Where(p => p.Id == comment.ProductId)
-                                         .First();
-
-
-                SetAccesRights();
-
-                return View(comment);
-            }
-        }
-        */
 
         [HttpPost]
         [Authorize(Roles = "User,Editor,Admin")]
@@ -213,7 +182,7 @@ namespace OnlineShopApp.Controllers
                 {
                     db.Comments.Add(comm);
                     db.SaveChanges();
-                    TempData["message"] = $"Comentariul cu id-ul {comm.Id} a fost adăugat cu succes!";
+                    TempData["message"] = $"Recenzia a fost adăugată cu succes!";
                     TempData["messageType"] = "alert-success";
                     return Redirect("/Products/Show/" + comm.ProductId);
                 }
@@ -278,7 +247,7 @@ namespace OnlineShopApp.Controllers
             {
                 db.Products.Add(product);
                 db.SaveChanges();
-                TempData["message"] = $"Produsul cu id-ul {product.Id} a fost adaugat cu succes!";
+                TempData["message"] = $"Produsul a fost adaugat cu succes!";
                 TempData["messageType"] = "alert-success";
                 return RedirectToAction("Show", new {@id = product.Id});
             }
@@ -336,7 +305,7 @@ namespace OnlineShopApp.Controllers
                     product.Discount = requestProduct.Discount;
                     product.CategoryId = requestProduct.CategoryId;
                     db.SaveChanges();
-                    TempData["message"] = $"Produsul cu id-ul {id} a fost editat cu succes!";
+                    TempData["message"] = $"Produsul a fost editat cu succes!";
                     TempData["messageType"] = "alert-success";
                     return RedirectToAction("Index");
                 }
@@ -367,7 +336,7 @@ namespace OnlineShopApp.Controllers
                     }
                     db.Products.Remove(product);
                     db.SaveChanges();
-                    TempData["message"] = $"Produsul cu id-ul {id} a fost șters cu succes!";
+                    TempData["message"] = $"Produsul a fost șters cu succes!";
                     TempData["messageType"] = "alert-success";
                 }
                 else

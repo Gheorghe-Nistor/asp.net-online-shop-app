@@ -49,7 +49,7 @@ namespace OnlineShopApp.Controllers
             {
                 db.Categories.Add(c);
                 db.SaveChanges();
-                TempData["message"] = $"Categoria cu id-ul {c.Id} a fost adaugat cu succes!";
+                TempData["message"] = $"Categoria a fost adaugată cu succes!";
                 TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
@@ -67,7 +67,7 @@ namespace OnlineShopApp.Controllers
             }
             catch(Exception)
             {
-                TempData["message"] = $"Nu s-a putut efectua operația de editare categorie. ID-ul {id} nu corespounde niciunei categorii din baza de date!";
+                TempData["message"] = $"Nu s-a putut efectua operația de editare categorie.";
                 TempData["messageType"] = "alert-danger";
             }
             return RedirectToAction("Index");
@@ -81,7 +81,7 @@ namespace OnlineShopApp.Controllers
             {
                 category.CategoryName = requestCategory.CategoryName;
                 db.SaveChanges();
-                TempData["message"] = $"Categoria cu id-ul {id} a fost editată cu succes!";
+                TempData["message"] = $"Categoria a fost editată cu succes!";
                 TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
@@ -97,13 +97,13 @@ namespace OnlineShopApp.Controllers
                 Category category = db.Categories.Find(id);
                 db.Categories.Remove(category);
                 db.SaveChanges();
-                TempData["message"] = $"Categoria cu id-ul {id} a fost ștearsă cu succes!";
+                TempData["message"] = $"Categoria a fost ștearsă cu succes!";
                 TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
             catch (Exception)
             {
-                TempData["message"] = $"Nu s-a putut efectua operația de ștergere categorie. ID-ul {id} nu corespounde niciunei categorii din baza de date!";
+                TempData["message"] = $"Nu s-a putut efectua operația de ștergere categorie.";
                 TempData["messageType"] = "alert-danger";
             }
             return RedirectToAction("Index");

@@ -28,7 +28,7 @@ namespace OnlineShopApp.Models
         public double? Discount { get; set; }
         public DateTime CreatedAt { get; set; }
         public byte[]? Image { get; set; }
-        public double Rating { get; set; }
+        public double? Rating { get; set; }
         public int? CategoryId { get; set; } 
         public string? UserId { get; set; } 
         public virtual ApplicationUser? User { get; set; } // un produs aparține unui singur utilizator

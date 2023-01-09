@@ -23,10 +23,11 @@
     }
 </style>
 
-<div class="d-flex flex-row flex-wrap justify-content-between">
+
+<div class="row row-cols-1 row-cols-md-3">
     @foreach (var category in @ViewBag.Categories)
     {
-        <div class="card product-card my-2">
+            <div class="card product-card col mb-4">
 
             <div class="d-flex flex-column justify-content-center text-center">
                 <h5 class="card-title mt-1">@category.CategoryName</h5>
