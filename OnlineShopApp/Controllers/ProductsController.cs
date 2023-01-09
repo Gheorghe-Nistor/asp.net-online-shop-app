@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using OnlineShopApp.Data;
 using OnlineShopApp.Models;
+using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
@@ -39,18 +40,61 @@ namespace OnlineShopApp.Controllers
             var products = db.Products.Include("Category")
                                       .Include("User")
                                       .Where(p => p.Status == true);
-            ViewBag.Products = products;
 
 
             var average_rating = from c in db.Comments
-                        group c by c.ProductId into g
-                        select new
-                        {
-                            ProductId = g.Key,
-                            AverageRating = g.Average(c => c.Rating)
-                        };
+                                 group c by c.ProductId into g
+                                 select new
+                                 {
+                                     ProductId = g.Key,
+                                     AverageRating = g.Average(c => c.Rating)
+                                 };
+
 
             ViewBag.AverageRating = average_rating;
+
+            var search = "";
+
+            if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
+            {
+                search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
+
+                //products = db.Products.Include("Category")
+                //        .Include("User")
+                //        .Where(p => p.Status == true && p.Title.Contains(search));
+                products = products.Where(p => p.Title.Contains(search));
+            }
+
+            var order = "";
+
+            
+
+            if (Convert.ToString(HttpContext.Request.Query["order"]) != null)
+            {
+                order = Convert.ToString(HttpContext.Request.Query["order"]);
+                switch (order)
+                {
+                    case "Pret ascendent":
+                        products = products.OrderBy(p => (p.Price - p.Price * p.Discount));
+                        break;
+                    case "Pret descendent":
+                        products = products.OrderByDescending(p => (p.Price - p.Price * p.Discount));
+                        break;
+                        //case "Rating ascendent":
+                        //    products = products.OrderBy(p => p.Rating).ToList();
+                        //    break;
+                        //case "Rating descendent":
+                        //    products = products.OrderByDescending(p => p.Rating).ToList();
+                        //    break;
+                }
+            }
+
+
+
+            ViewBag.Products = products;
+
+            ViewBag.SearchString = search;
+
 
             if (User.IsInRole("Admin"))
             {
@@ -72,7 +116,8 @@ namespace OnlineShopApp.Controllers
             {
                 var products = db.Products.Include("Category")
                                           .Include("User")
-                                          .Where(p => p.Status == false);
+                                          .Where(p => p.Status == false)
+                                          .OrderBy(p => p.Price);
                 if (products.Count() > 0) {
                     ViewBag.Products = products;
                     return View();
