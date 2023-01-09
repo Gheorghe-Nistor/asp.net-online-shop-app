@@ -14,5 +14,7 @@ namespace OnlineShopApp.Models
         public string? UserId { get; set; }
         public virtual ApplicationUser? User { get; set; } // un comentariu aparține unui singur utilizator
         public virtual Product? Product { get; set; }
+
+        public int? Rating { get; set; }
     }
 }

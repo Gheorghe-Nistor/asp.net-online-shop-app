@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using OnlineShopApp.Data;
 using OnlineShopApp.Models;
+using System.Xml.Linq;
 using System.Xml.Schema;
 
 namespace OnlineShopApp.Controllers
@@ -38,6 +40,18 @@ namespace OnlineShopApp.Controllers
                                       .Include("User")
                                       .Where(p => p.Status == true);
             ViewBag.Products = products;
+
+
+            var average_rating = from c in db.Comments
+                        group c by c.ProductId into g
+                        select new
+                        {
+                            ProductId = g.Key,
+                            AverageRating = g.Average(c => c.Rating)
+                        };
+
+            ViewBag.AverageRating = average_rating;
+
             if (User.IsInRole("Admin"))
             {
                 var unvalidatedProducts = db.Products.Include("Category")
@@ -100,7 +114,7 @@ namespace OnlineShopApp.Controllers
                                              .Where(p => p.Id == id)
                                              .First();
                 ViewBag.Product = product;
-                return View();
+                return View(product);
             }
             catch (Exception)
             {

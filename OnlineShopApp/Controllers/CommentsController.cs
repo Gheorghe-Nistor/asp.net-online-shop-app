@@ -89,6 +89,7 @@ namespace OnlineShopApp.Controllers
                 if (ModelState.IsValid)
                 {
                     comment.Content = requestComment.Content;
+                    comment.Rating = requestComment.Rating;
                     db.SaveChanges();
                     TempData["message"] = $"Comentariul cu id-ul {id} a fost modificat cu succes!";
                     TempData["messageType"] = "alert-success";
