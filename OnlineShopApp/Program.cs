@@ -52,7 +52,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "EditCartItem",
-    pattern: "{controller=ShoppingCart}/{action=Edit}/{id?}/{value?}");
+    pattern: "{controller=ShoppingCart}/{action=Edit}/{id}/{value}");
 
 app.MapControllerRoute(
     name: "default",

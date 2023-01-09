@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShopApp.Data;
 using OnlineShopApp.Models;
@@ -10,15 +11,36 @@ namespace OnlineShopApp.Controllers
     {
         private readonly ApplicationDbContext db;
 
-        public CategoriesController(ApplicationDbContext contex)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public CategoriesController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager
+            )
         {
-            db = contex;
+            db = context;
+
+            _userManager = userManager;
+
+            _roleManager = roleManager;
+        }
+
+        private void SetAccesRights()
+        {
+            ViewBag.CurrentUser = _userManager.GetUserId(User);
+            ViewBag.isUser = User.IsInRole("User") || false;
+            ViewBag.isCollaborator = User.IsInRole("Collaborator") || false;
+            ViewBag.isAdmin = User.IsInRole("Admin") || false;
         }
 
         // Sa se afiseze toate categoriile
         // HttpGet implicit
         public IActionResult Index()
         {
+            SetAccesRights();
             var categories = from category in db.Categories
                              orderby category.CategoryName
                              select category;
@@ -60,6 +82,7 @@ namespace OnlineShopApp.Controllers
 
         public IActionResult Edit(int id)
         {
+            SetAccesRights();
             try
             {
                 Category category = db.Categories.Find(id);
@@ -88,10 +111,8 @@ namespace OnlineShopApp.Controllers
             return View(requestCategory);
         }
 
-        [HttpPost]
         public ActionResult Delete(int id)
         {
-
             try
             {
                 Category category = db.Categories.Find(id);
