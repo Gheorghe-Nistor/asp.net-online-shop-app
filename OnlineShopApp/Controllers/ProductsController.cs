@@ -203,10 +203,9 @@ namespace OnlineShopApp.Controllers
                                          .Where(p => p.Id == comm.ProductId)
                                          .First();
 
-
                 SetAccesRights();
-
-                return View(comm);
+                ViewBag.Product = product;
+                return View(product);
             }
 
         }
