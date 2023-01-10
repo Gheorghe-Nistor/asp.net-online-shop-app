@@ -29,9 +29,18 @@ namespace OnlineShopApp.Controllers
             _roleManager = roleManager;
         }
 
+        private void SetAccesRights()
+        {
+            ViewBag.CurrentUser = _userManager.GetUserId(User);
+            ViewBag.isUser = User.IsInRole("User") || false;
+            ViewBag.isCollaborator = User.IsInRole("Collaborator") || false;
+            ViewBag.isAdmin = User.IsInRole("Admin") || false;
+        }
+
         [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Edit(int id)
         {
+            SetAccesRights();
             try
             {
                 Comment comment = db.Comments.Find(id);

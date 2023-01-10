@@ -6,25 +6,37 @@
 
 <br />
 
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
 <form method="GET">
     <div class="input-group mb-3">
-        <input type="text" class="form-control"placeholder="Search topics or keywords" name="search"value="@ViewBag.SearchString">
+        <input type="text" class="form-control"placeholder="Caută produs" name="search"value="@ViewBag.SearchString">
         <button class="btn btn-outline-success"type="submit">Search</button>
     </div>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Sortează după
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><input type="submit" class="dropdown-item" value="Pret ascendent" name="order"/></li>
+            <li><input type="submit" class="dropdown-item" value="Pret descendent" name="order" /></li>
+            <li><input type="submit" class="dropdown-item" value="Rating ascendent" name="order" /></li>
+            <li><input type="submit" class="dropdown-item" value="Rating descendent" name="order" /></li>
+        </ul>
+  </div>
 </form>
 
 <br />
 
-
-<h3>@ViewBag.Title</h3>
-<hr />
 
 @if (ViewBag.isAdmin)
 {
     <a class="btn btn-success" asp-area="" asp-controller="Products" asp-action="Validate">Validare produse (@ViewBag.UnvalidatedProducts)</a>
 }
 
-<form method="get">
+@*<form method="get" action="@ViewBag.SearchString">
   <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
       Sortează după
@@ -34,11 +46,9 @@
       <li><input type="submit" class="dropdown-item" value="Pret descendent" name="order" /></li>
       <li><input type="submit" class="dropdown-item" value="Rating ascendent" name="order" /></li>
       <li><input type="submit" class="dropdown-item" value="Rating descendent" name="order" /></li>
-
-      
     </ul>
   </div>
-</form>
+</form>*@
 
 <br />
 

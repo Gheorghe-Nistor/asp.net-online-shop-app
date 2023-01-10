@@ -50,8 +50,6 @@ namespace OnlineShopApp.Controllers
             }
             db.SaveChanges();
 
-
-
             var search = "";
 
             if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
@@ -62,7 +60,6 @@ namespace OnlineShopApp.Controllers
 
             var order = "";
 
-            
             if (Convert.ToString(HttpContext.Request.Query["order"]) != null)
             {
                 order = Convert.ToString(HttpContext.Request.Query["order"]);
@@ -82,6 +79,12 @@ namespace OnlineShopApp.Controllers
                         products = products.OrderByDescending(p => p.Rating);
                         break;
                 }
+            }
+
+
+            if (search != "")
+            {
+                products = products.Where(p => p.Title.Contains(search));
             }
 
 
