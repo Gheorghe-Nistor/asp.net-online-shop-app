@@ -334,6 +334,11 @@ namespace OnlineShopApp.Controllers
                     {
                         db.ShoppingCarts.Remove(cartItem);
                     }
+                    var comments = db.Comments.Where(c => c.ProductId == id);
+                    foreach (var comm in comments)
+                    {
+                        db.Comments.Remove(comm);
+                    }
                     db.Products.Remove(product);
                     db.SaveChanges();
                     TempData["message"] = $"Produsul a fost șters cu succes!";

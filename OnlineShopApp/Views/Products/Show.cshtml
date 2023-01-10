@@ -101,50 +101,6 @@
 <br />
 <br />
 
-@*@foreach (var comm in Model.Comments)
-{
-        <div class="container">
-            <div class="row">
-                <div class="col-md-2"></div>
-
-                <div class="col-md-8">
-
-        <div class="card bg-white mb-3">
-            <div class="card-body d-flex flex-row">
-                <div class="p-2">
-                    <i class="bi bi-person"></i>
-                </div>
-                <div class="p-2 w-75">
-                            <h6 class="font-weight-bold">@comm.User.UserName @comm.Rating/5 <i class="bi bi-star-fill"></i></h6>
-                    <p class="card-text">@comm.Content</p>
-                    <small class="text-muted">@comm.Date</small>
-                </div>
-            </div>
-            @if (comm.UserId == ViewBag.CurrentUser || ViewBag.isAdmin)
-            {
-                <div class="d-flex">
-                    <div>
-                        <a class="btn btn-outline-primary" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editeaza</a>
-                    </div>
-                    <div style="float:right">
-                        <form method="post" action="/Comments/Delete/@comm.Id">
-                            <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i>Sterge</button>
-                        </form>
-                    </div>
-                </div>
-            }
-        </div>
-                    <br />
-
-                </div>
-
-                <div class="col-md-2"></div>
-
-            </div>
-
-        </div>
-}*@
-
 @foreach (var comm in Model.Comments)
 {
     <div class="container">
