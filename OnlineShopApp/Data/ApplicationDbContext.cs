@@ -14,6 +14,5 @@ namespace OnlineShopApp.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
-        public DbSet<Panel> Panels { get; set; }
     }
 }
