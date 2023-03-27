@@ -60,9 +60,6 @@ namespace OnlineShopApp.Controllers
                     select idr).First().Id;
 
 
-            //var usr = (from ur in db.UserRoles
-            //          where ur.UserId == id
-            //          select ur).First();
             var usr = db.UserRoles.Where(p=>p.UserId == id).First();
 
             db.UserRoles.Remove(usr);
@@ -71,8 +68,6 @@ namespace OnlineShopApp.Controllers
             db.UserRoles.Add(usr);
             db.SaveChanges();
             return RedirectToAction("Index");
-            //return Redirect("/Panel/Index");
-
         }
     }
 }

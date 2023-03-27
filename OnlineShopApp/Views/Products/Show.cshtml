@@ -66,6 +66,9 @@
 <br />
 
 
+
+
+
 <div class="container">
     <div class="row">
         <div class="col-md-2"></div>
@@ -117,20 +120,20 @@
                             <small class="text-muted">@comm.Date</small>
                         </div>
                     </div>
-                        @if (comm.UserId == ViewBag.CurrentUser || ViewBag.isAdmin)
-                        {
-                            <div class="d-flex justify-content-center" style="padding-bottom: 10px">
-                                <div style="margin-right: 20px">
-                                 <a class="btn btn-info" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editează</a>
-                                </div>
-                                <div style="float: right;">
-                                    <form method="post" action="/Comments/Delete/@comm.Id">
-                                        <button class="btn btn-danger" type="submit"><i class="bi bi-trash"></i>Șterge</button>
-                                    </form>
-                                </div>
+                @if (comm.UserId == ViewBag.CurrentUser || ViewBag.isAdmin)
+                {
+                        <div class="d-flex justify-content-center" style="padding-bottom: 10px">
+                            <div style="margin-right: 20px">
+                                <a class="btn btn-info" href="/Comments/Edit/@comm.Id"><i class="bi bi-pencil-square"></i>Editează</a>
                             </div>
-                        }
-              </div>
+                            <div style="float: right;">
+                                <form method="post" action="/Comments/Delete/@comm.Id">
+                                    <button class="btn btn-danger" type="submit"><i class="bi bi-trash"></i>Șterge</button>
+                                </form>
+                            </div>
+                        </div>
+                }
+                </div>
             </div>
         </div>
     </div>

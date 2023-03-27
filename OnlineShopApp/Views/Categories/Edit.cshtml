@@ -8,29 +8,19 @@
 <h3 class="text-center mt-2">@ViewBag.Title </h3>
 <hr />
 
-@*<form method="post" action="/Categories/Edit/@ViewBag.Category.Id">
-
-    @Html.Label("CategoryName", "Nume categorie")
-    <br />
-    @Html.Editor("CategoryName")
-    <br /><br />
-
-    <button class="btn btn-success" type="submit">Modifica categoria</button>
-</form>*@
-
 <div class="container mt-1 col-6">
     @using (Html.BeginForm(actionName: "Edit", controllerName: "Categories",
-            method: FormMethod.Post,
-            routeValues: new { id = Model.Id }))
+           method: FormMethod.Post,
+           routeValues: new { id = Model.Id }))
     {
         @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
         @Html.LabelFor(m => m.CategoryName, "Categorie")
         @Html.TextBoxFor(m => m.CategoryName, null, new { @class = "form-control"})
-        <br />
-        <div class="d-flex justify-content-center">
-            <a class="btn btn-secondary" asp-area="" asp-controller="Categories" asp-action="Index" asp-route-id="@Model.Id" style="margin-right: 10px;">Înapoi afișare categorii</a>
-            <button class="btn btn-success" type="submit">Editează categoria</button>
-        </div>
+            <br />
+            <div class="d-flex justify-content-center">
+                <a class="btn btn-secondary" asp-area="" asp-controller="Categories" asp-action="Index" asp-route-id="@Model.Id" style="margin-right: 10px;">Înapoi afișare categorii</a>
+                <button class="btn btn-success" type="submit">Editează categoria</button>
+            </div>
     }
 </div>

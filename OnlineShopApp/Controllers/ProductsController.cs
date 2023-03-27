@@ -47,7 +47,9 @@ namespace OnlineShopApp.Controllers
                              where c.ProductId == product.Id
                              select c.Rating;
                 product.Rating = rating.Average();
+                product.CategoriesList = GetAllCategories();
             }
+            
             db.SaveChanges();
 
             var search = "";
@@ -72,12 +74,21 @@ namespace OnlineShopApp.Controllers
                         products = products.OrderByDescending(p => (p.Price - p.Price * p.Discount));
                         break;
                     case "Rating ascendent":
-                        //products = products.OrderBy(p => p.Rating);
                         products = products.OrderBy(p => p.Rating ?? double.MaxValue);
                         break;
                     case "Rating descendent":
                         products = products.OrderByDescending(p => p.Rating);
                         break;
+                }
+            }
+
+            var category = "";
+            if (Convert.ToString(HttpContext.Request.Query["category"]) != null)
+            {
+                category = Convert.ToString(HttpContext.Request.Query["category"]);
+                if (category != "All")
+                {
+                    products = products.Where(p => p.Category.CategoryName == category);
                 }
             }
 
@@ -90,7 +101,7 @@ namespace OnlineShopApp.Controllers
 
 
             ViewBag.Products = products;
-
+            ViewBag.Categories = GetAllCategories();
             ViewBag.SearchString = search;
 
 
